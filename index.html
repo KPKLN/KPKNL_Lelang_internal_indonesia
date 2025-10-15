@@ -1,0 +1,92 @@
+<h3>Fine Gold 999.9 Certieye (25 g)</h3>
+        <p>Emas Antam 25 gram bersertifikat Certieye.</p>
+        <p class="harga" data-harga="45000000">Rp 45.000.000</p>
+        <button class="keranjang-btn" onclick="tambahKeKeranjang('Fine Gold 999.9 Certieye (25 g)', 45000000)">Tambah ke Keranjang</button>
+        <a href="https://wa.me/62817581254?text=Halo,%20saya%20ingin%20membeli%20Fine%20Gold%2025g" class="beli-btn" target="_blank">Beli Sekarang</a>
+      </div>
+
+      <!-- Fine Gold 10g -->
+      <div class="produk">
+        <img src="antam_logam_mulia_antam_010_gram_full01_phlanbeg.webp" alt="Fine Gold 999.9 Certieye 10g">
+        <h3>Fine Gold 999.9 Certieye (10 g)</h3>
+        <p>Emas Antam 10 gram bersertifikat Certieye.</p>
+        <p class="harga" data-harga="18000000">Rp 18.000.000</p>
+        <button class="keranjang-btn" onclick="tambahKeKeranjang('Fine Gold 999.9 Certieye (10 g)', 18000000)">Tambah ke Keranjang</button>
+        <a href="https://wa.me/62817581254?text=Halo,%20saya%20ingin%20membeli%20Fine%20Gold%2010g" class="beli-btn" target="_blank">Beli Sekarang</a>
+      </div>
+
+      <!-- Fine Gold 1 Kilo -->
+      <div class="produk">
+        <img src="Lm 1000 gr.jpg" alt="Fine Gold 999.9 LBMA 1 Kilo">
+        <h3>Fine Gold 999.9 Sertifikat LBMA (1 Kilo)</h3>
+        <p>Emas batangan Antam 1 kilogram bersertifikat LBMA dengan kadar kemurnian 999.9 (24 karat).</p>
+        <p class="harga" data-harga="1800000000">Rp 1.800.000.000</p>
+        <button class="keranjang-btn" onclick="tambahKeKeranjang('Fine Gold 999.9 Sertifikat LBMA (1 Kilo)', 1800000000)">Tambah ke Keranjang</button>
+        <a href="https://wa.me/62817581254?text=Halo,%20saya%20ingin%20membeli%20Fine%20Gold%201%20Kilo%20LBMA" class="beli-btn" target="_blank">Beli Sekarang</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Sidebar Keranjang -->
+  <div class="cart-panel" id="cart-panel">
+    <div class="cart-header">
+      <h2>Keranjang Belanja</h2>
+      <span style="cursor:pointer;" onclick="toggleCart()">✖</span>
+    </div>
+    <div id="cart-items"></div>
+    <div class="cart-total" id="cart-total">Total: Rp 0</div>
+    <a id="checkout-link" class="checkout-btn" target="_blank">Checkout via WhatsApp</a>
+  </div>
+
+  <script>
+    let keranjang = [];
+
+    function cariProduk() {
+      const input = document.getElementById('search-bar').value.toLowerCase();
+      const produkList = document.querySelectorAll('.produk');
+      produkList.forEach(produk => {
+        const namaProduk = produk.querySelector('h3').textContent.toLowerCase();
+        produk.style.display = namaProduk.includes(input) ? '' : 'none';
+      });
+    }
+
+    function tambahKeKeranjang(nama, harga) {
+      keranjang.push({ nama, harga });
+      updateKeranjang();
+    }
+
+    function updateKeranjang() {
+      const cartItems = document.getElementById('cart-items');
+      const cartCount = document.getElementById('cart-count');
+      const cartTotal = document.getElementById('cart-total');
+      const checkoutLink = document.getElementById('checkout-link');
+
+      cartItems.innerHTML = '';
+      let total = 0;
+      keranjang.forEach(item => {
+        total += item.harga;
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = <span>${item.nama}</span><span>Rp ${item.harga.toLocaleString('id-ID')}</span>;
+        cartItems.appendChild(div);
+      });
+
+      cartCount.textContent = keranjang.length;
+      cartTotal.textContent = Total: Rp ${total.toLocaleString('id-ID')};
+
+      const pesan = encodeURIComponent(
+        Halo, saya ingin memesan:\n +
+        keranjang.map(i => - ${i.nama} (Rp ${i.harga.toLocaleString('id-ID')})).join('\n') +
+        \n\nTotal: Rp ${total.toLocaleString('id-ID')}
+      );
+      checkoutLink.href = https://wa.me/62817581254?text=${pesan};
+    }
+
+    function toggleCart() {
+      document.getElementById('cart-panel').classList.toggle('open');
+    }
+  </script>
+
+</body>
+</html>
