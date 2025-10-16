@@ -1,321 +1,265 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KPKNL INTERNAL</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Katalog Lelang — Placeholder</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background-color: #f4f4f4;
+    :root{
+      --blue:#007bff;
+      --navy:#003366;
+      --muted:#d0d7de;
+      --bg:#ffffff;
+      --card:#f9f9f9;
+    }
+    body{
+      font-family: Arial, Helvetica, sans-serif;
+      margin:0;
+      padding:36px 18px;
+      background:var(--bg);
+      color:var(--navy);
+    }
+    h1{
+      text-align:center;
+      margin-bottom:28px;
+      color:var(--navy);
+      font-size:28px;
     }
 
-    header {
-      background-color: #007bff;
-      color: white;
-      padding: 20px 0;
-      text-align: center;
+    /* katalog grid */
+    .katalog-container{
+      display:flex;
+      flex-wrap:wrap;
+      gap:18px;
+      justify-content:center;
+      max-width:980px;
+      margin:0 auto 12px;
     }
-
-    header img {
-      height: 100px;
-      display: block;
-      margin: 0 auto 10px auto;
+    .katalog-item{
+      width:180px;
+      height:150px;
+      border:1px solid var(--muted);
+      border-radius:12px;
+      background:#fff;
+      text-align:center;
+      padding:18px 10px;
+      cursor:pointer;
+      transition:all .18s ease;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
     }
+    .katalog-item:hover{ transform:translateY(-6px); box-shadow:0 8px 20px rgba(0,0,0,.08); border-color:var(--blue); }
+    .katalog-item i{ font-size:36px; color:var(--blue); margin-bottom:8px; }
+    .katalog-item span{ font-weight:700; color:var(--navy); font-size:15px; }
 
-    h1 {
-      margin: 0;
-      font-size: 26px;
+    /* judul kategori */
+    .judul-kategori{ text-align:center; color:var(--navy); font-size:20px; font-weight:700; margin-top:26px; display:none; }
+
+    /* produk grid */
+    .produk-container{
+      max-width:1000px;
+      margin:18px auto 60px;
+      display:none;
+      gap:20px;
+      justify-content:center;
+      flex-wrap:wrap;
+      animation:fadeIn .25s ease;
     }
-
-    .container {
-      width: 90%;
-      max-width: 1100px;
-      margin: 30px auto;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    .produk-item{
+      width:220px;
+      border:1px solid var(--muted);
+      border-radius:10px;
+      background:var(--card);
+      padding:10px;
+      text-align:center;
+      transition:transform .18s ease, box-shadow .18s ease;
     }
+    .produk-item:hover{ transform:translateY(-6px); box-shadow:0 8px 20px rgba(0,0,0,.08); }
+    .produk-item img{ width:100%; height:130px; object-fit:cover; border-radius:8px; margin-bottom:8px; }
+    .produk-item .nama{ display:block; font-weight:700; color:var(--navy); margin-bottom:6px; }
+    .produk-item .harga{ color:var(--blue); font-weight:700; margin-bottom:8px; }
+    .detail-btn{ display:inline-block; padding:8px 12px; background:var(--blue); color:#fff; text-decoration:none; border-radius:8px; font-size:14px; border:none; cursor:pointer; }
+    .detail-btn:hover{ background:#0056b3; }
 
-    h2 {
-      text-align: center;
-      color: #333;
-      margin-bottom: 10px;
-    }
+    /* modal */
+    .modal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:2000; align-items:center; justify-content:center; padding:20px; }
+    .modal.show{ display:flex; }
+    .modal-box{ width:100%; max-width:680px; background:#fff; border-radius:12px; padding:18px; box-shadow:0 10px 40px rgba(0,0,0,.25); position:relative; }
+    .modal-close{ position:absolute; top:12px; right:14px; font-size:22px; color:#666; cursor:pointer; }
+    .modal-content{ display:flex; gap:16px; flex-wrap:wrap; align-items:flex-start; }
+    .modal-img{ width:100%; max-width:320px; height:220px; object-fit:cover; border-radius:8px; }
+    .modal-info{ flex:1; min-width:180px; }
+    .modal-info h2{ margin:0 0 8px; color:var(--navy); font-size:20px; }
+    .modal-info .price{ color:var(--blue); font-weight:800; margin-bottom:10px; }
+    .modal-info p{ margin:0 0 12px; color:#333; line-height:1.4; }
+    .modal-info .actions{ margin-top:6px; }
+    .btn-secondary{ display:inline-block; padding:8px 12px; border-radius:8px; border:1px solid var(--muted); text-decoration:none; color:var(--navy); background:#fff; cursor:pointer; }
+    .btn-secondary:hover{ background:#f2f6fb; }
 
-    #search-bar {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      margin: 15px 0;
-      font-size: 16px;
-    }
+    @keyframes fadeIn{ from{opacity:0} to{opacity:1} }
 
-    .produk-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-top: 10px;
-    }
-
-    .produk {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 15px;
-      text-align: center;
-      background-color: #fafafa;
-      transition: 0.3s;
-    }
-
-    .produk:hover {
-      transform: scale(1.04);
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    }
-
-    .produk img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      border-radius: 8px;
-    }
-
-    .produk h3 {
-      margin: 10px 0 5px;
-      color: #007bff;
-    }
-
-    .produk p {
-      margin: 0;
-      color: #555;
-    }
-
-    .harga {
-      font-weight: bold;
-      color: green;
-      margin-top: 10px;
-      font-size: 18px;
-    }
-
-    .beli-btn {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 8px 15px;
-      background-color: #25D366;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      transition: background 0.3s;
-    }
-
-    .beli-btn:hover {
-      background-color: #128C7E;
-    }
-
-    .section-title {
-      margin-top: 40px;
-      font-size: 24px;
-      color: #007bff;
-      text-align: center;
+    /* responsive */
+    @media (max-width:720px){
+      .katalog-item{ width:140px; height:130px; padding:14px; }
+      .produk-item{ width:160px; }
+      .modal-content{ flex-direction:column; align-items:center; }
+      .modal-img{ max-width:100%; height:200px; }
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <img src="lelang_indonesia_edit_copy.jpg" alt="Logo KPKNL INTERNAL">
-    <h1>KPKNL INTERNAL</h1>
-  </header>
+  <h1>Katalog Lelang (Placeholder)</h1>
 
-  <div class="container">
-    <h2 class="section-title">Katalog Emas</h2>
-    <input type="text" id="search-bar" placeholder="Cari barang..." onkeyup="cariProduk()">
+  <div class="katalog-container" id="katalogList">
+    <!-- katalog items di-render oleh JS -->
+  </div>
 
-    <div class="produk-list" id="produkList">
-      <div class="produk">
-        <img src="images/gold10gr.png" alt="Fine Gold 999.9 Certieye 10g">
-        <h3>Fine Gold 999.9 Certieye (10 g)</h3>
-        <p>Emas Antam 10 gram bersertifikat Certieye.</p>
-        <p class="harga">Rp 18.000.000</p>
-        <a href="https://wa.me/62817581254?text=Halo,%20saya%20ingin%20membeli%20Fine%20Gold%2010g" class="beli-btn" target="_blank">Beli Sekarang</a>
-      </div>
+  <div id="judul" class="judul-kategori"></div>
 
-      <div class="produk">
-        <img src="images/gold25.png" alt="Fine Gold 999.9 Certieye 25g">
-        <h3>Fine Gold 999.9 Certieye (25 g)</h3>
-        <p>Emas Antam 25 gram bersertifikat Certieye.</p>
-        <p class="harga">Rp 45.000.000</p>
-        <a href="https://wa.me/62817581254?text=Halo,%20saya%20ingin%20membeli%20Fine%20Gold%2025g" class="beli-btn" target="_blank">Beli Sekarang</a>
-      </div>
+  <!-- wadah produk (akan diisi dinamis) -->
+  <div id="produkArea" class="produk-container"></div>
 
-      <div class="produk">
-        <img src="images/gold50.png" alt="Fine Gold 999.9 Certieye 50g">
-        <h3>Fine Gold 999.9 Certieye (50 g)</h3>
-        <p>Emas Antam 50 gram bersertifikat Certieye.</p>
-        <p class="harga">Rp 90.000.000</p>
-        <a href="https://wa.me/62817581254?text=Halo,%20saya%20ingin%20membeli%20Fine%20Gold%2050g" class="beli-btn" target="_blank">Beli Sekarang</a>
-      </div>
-
-      <div class="produk">
-        <img src="images/gold100.png" alt="Fine Gold 999.9 Certieye 100g">
-        <h3>Fine Gold 999.9 Certieye (100 g)</h3>
-        <p>Emas Antam 100 gram bersertifikat Certieye.</p>
-        <p class="harga">Rp 180.000.000</p>
-        <a href="https://wa.me/62817581254?text=Halo,%20saya%20ingin%20membeli%20Fine%20Gold%20100g" class="beli-btn" target="_blank">Beli Sekarang</a>
-      </div>
-
-      <div class="produk">
-        <img src="images/gold250.png" alt="Fine Gold 999.9 LBMA 250g">
-        <h3>Fine Gold 999.9 LBMA (250 g)</h3>
-        <p>Emas Antam 250 gram bersertifikat LBMA.</p>
-        <p class="harga">Rp 450.000.000</p>
-        <a href="https://wa.me/62817581254?text=Halo,%20saya%20ingin%20membeli%20Fine%20Gold%20250g" class="beli-btn" target="_blank">Beli Sekarang</a>
-      </div>
-
-      <div class="produk">
-        <img src="images/gold500.png" alt="Fine Gold 999.9 LBMA 500g">
-        <h3>Fine Gold 999.9 LBMA (500 g)</h3>
-        <p>Emas batangan Antam 500 gram bersertifikat LBMA.</p>
-        <p class="harga">Rp 900.000.000</p>
-        <a href="https://wa.me/62817581254?text=Halo,%20saya%20ingin%20membeli%20Fine%20Gold%20500g" class="beli-btn" target="_blank">Beli Sekarang</a>
-      </div>
-
-      <div class="produk">
-        <img src="images/gold1000.png" alt="Fine Gold 999.9 LBMA 1 Kilo">
-        <h3>Fine Gold 999.9 LBMA (1 Kilo)</h3>
-        <p>Emas batangan Antam 1 kilogram bersertifikat LBMA.</p>
-        <p class="harga">Rp 1.800.000.000</p>
-        <a href="https://wa.me/62817581254?text=Halo,%20saya%20ingin%20membeli%20Fine%20Gold%201Kilo" class="beli-btn" target="_blank">Beli Sekarang</a>
-      </div>
-    </div>
-
-    <h2 class="section-title">Katalog Mobil 2025</h2>
-    <div class="produk-list">
-
-      <div class="produk">
-        <img src="images/car_placeholder.png" alt="Toyota Land Cruiser 2025">
-        <h3>Toyota Land Cruiser 2025</h3>
-        <p>3.3 GR-S | Automatic</p>
-        <p class="harga">Rp 1.500.000.000</p>
-        <a href="https://wa.me/62817581254?text=Halo,%20saya%20ingin%20membeli%20Toyota%20Land%20Cruiser%202025" class="beli-btn" target="_blank">Beli Sekarang</a>
-      </div>
-
-      <div class="produk">
-        <img src="images/car_placeholder.png" alt="Toyota Voxy 2025">
-        <h3>Toyota Voxy 2025</h3>
-        <p>2.0 Van Wagon | Automatic</p>
-        <p class="harga">Rp 320.000.000</p>
-        <a href="https://wa.me/62817581254?text=Halo,%20saya%20ingin%20membeli%20Toyota%20Voxy%202025" class="beli-btn" target="_blank">Beli Sekarang</a>
-      </div>
-
-      <div class="produk">
-        <img src="images/car_placeholder.png" alt="Kijang Innova Zenit 2025">
-        <h3>Kijang Innova Zenit 2025</h3>
-        <p>2.0 Q HV CVT TSS | Automatic</p>
-        <p class="harga">Rp 370.000.000</p>
-        <a href="https://wa.me/62817581254?text=Halo,%20saya%20ingin%20membeli%20Kijang%20Innova%20Zenit%202025" class="beli-btn" target="_blank">Beli Sekarang</a>
-      </div>
-
-      <div class="produk">
-        <img src="images/car_placeholder.png" alt="Honda Accord 2025">
-        <h3>Honda Accord 2025</h3>
-        <p>1.5 Sedan | Automatic</p>
-        <p class="harga">Rp 430.000.000</p>
-        <a href="https://wa.me/62817581254?text=Halo,%20saya%20ingin%20membeli%20Honda%20Accord%202025" class="beli-btn" target="_blank">Beli Sekarang</a>
-      </div>
-
-      <div class="produk">
-        <img src="images/car_placeholder.png" alt="Honda BR-V 2025">
-        <h3>Honda BR-V 2025</h3>
-        <p>1.5 Prestige SUV | Automatic</p>
-        <p class="harga">Rp 192.000.000</p>
-        <a href="https://wa.me/62817581254?text=Halo,%20saya%20ingin%20membeli%20Honda%20BR-V%202025" class="beli-btn" target="_blank">Beli Sekarang</a>
-      </div>
-
-      <div class="produk">
-        <img src="images/car_placeholder.png" alt="Honda Civic 2025">
-        <h3>Honda Civic 2025</h3>
-        <p>1.5 RS Sedan | Automatic</p>
-        <p class="harga">Rp 360.000.000</p>
-        <a href="https://wa.me/62817581254?text=Halo,%20saya%20ingin%20membeli%20Honda%20Civic%202025" class="beli-btn" target="_blank">Beli Sekarang</a>
-      </div>
-
-      <div class="produk">
-        <img src="images/car_placeholder.png" alt="Mercedes-Benz A35 2025">
-        <h3>Mercedes-Benz A35 2025</h3>
-        <p>AMG 2.0 | Automatic</p>
-        <p class="harga">Rp 550.000.000</p>
-        <a href="https://wa.me/62817581254?text=Halo,%20saya%20ingin%20membeli%20Mercedes-Benz%20A35%202025" class="beli-btn" target="_blank">Beli Sekarang</a>
-      </div>
-
-      <div class="produk">
-        <img src="images/car_placeholder.png" alt="Mercedes-Benz A45 2025">
-        <h3>Mercedes-Benz A45 2025</h3>
-        <p>AMG 2.054 4MATIC+ Hatchback | Automatic</p>
-        <p class="harga">Rp 750.000.000</p>
-        <a href="https://wa.me/62817581254?text=Halo,%20saya%20ingin%20membeli%20Mercedes-Benz%20A45%202025" class="beli-btn" target="_blank">Beli Sekarang</a>
-      </div>
-
-      <div class="produk">
-        <img src="images/car_placeholder.png" alt="Mercedes-Benz A200 2025">
-        <h3>Mercedes-Benz A200 2025</h3>
-        <p>3 Progressive Line | Automatic</p>
-        <p class="harga">Rp 420.000.000</p>
-        <a href="https://wa.me/62817581254?text=Halo,%20saya%20ingin%20membeli%20Mercedes-Benz%20A200%202025" class="beli-btn" target="_blank">Beli Sekarang</a>
-      </div>
-
-      <div class="produk">
-        <img src="images/car_placeholder.png" alt="BMW X3 2.0 2025">
-        <h3>BMW X3 2.0 2025</h3>
-        <p>Drive20i xLine SUV | Automatic</p>
-        <p class="harga">Rp 600.000.000</p>
-        <a href="https://wa.me/62817581254?text=Halo,%20saya%20ingin%20membeli%20BMW%20X3%202025" class="beli-btn" target="_blank">Beli Sekarang</a>
-      </div>
-
-      <div class="produk">
-        <img src="images/car_placeholder.png" alt="Pajero Sport 2025">
-        <h3>Pajero Sport 2025</h3>
-        <p>2.4 DAKAR SUV | Automatic</p>
-        <p class="harga">Rp 250.000.000</p>
-        <a href="https://wa.me/62817581254?text=Halo,%20saya%20ingin%20membeli%20Pajero%20Sport%202025" class="beli-btn" target="_blank">Beli Sekarang</a>
-      </div>
-
-      <div class="produk">
-        <img src="images/car_placeholder.png" alt="Xpander Cross 2025">
-        <h3>Xpander Cross 2025</h3>
-        <p>1.5 Cross Wagon | Automatic</p>
-        <p class="harga">Rp 170.000.000</p>
-        <a href="https://wa.me/62817581254?text=Halo,%20saya%20ingin%20membeli%20Xpander%20Cross%202025" class="beli-btn" target="_blank">Beli Sekarang</a>
-      </div>
-
-      <div class="produk">
-        <img src="images/car_placeholder.png" alt="Mazda CX-5 2025">
-        <h3>Mazda CX-5 2025</h3>
-        <p>2.5 AWD SUV | Automatic</p>
-        <p class="harga">Rp 370.000.000</p>
-        <a href="https://wa.me/62817581254?text=Halo,%20saya%20ingin%20membeli%20Mazda%20CX-5%202025" class="beli-btn" target="_blank">Beli Sekarang</a>
-      </div>
-
-      <div class="produk">
-        <img src="images/car_placeholder.png" alt="Mazda CX-30 Grand Touring 2025">
-        <h3>Mazda CX-30 Grand Touring 2025</h3>
-        <p>Wagon RST | Automatic</p>
-        <p class="harga">Rp 370.000.000</p>
-        <a href="https://wa.me/62817581254?text=Halo,%20saya%20ingin%20membeli%20Mazda%20CX-30%20Grand%20Touring%202025" class="beli-btn" target="_blank">Beli Sekarang</a>
+  <!-- Modal detail -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-modal="true">
+      <div class="modal-close" id="modalClose">&times;</div>
+      <div class="modal-content">
+        <img id="modalImg" class="modal-img" src="" alt="Gambar Produk">
+        <div class="modal-info">
+          <h2 id="modalTitle">Nama Produk</h2>
+          <div class="price" id="modalPrice">Rp 0</div>
+          <p id="modalDesc">Deskripsi singkat produk akan tampil di sini.</p>
+          <div class="actions">
+            <a id="modalDetailLink" class="detail-btn" href="#" target="_blank">Lihat Halaman</a>
+            <button class="btn-secondary" onclick="closeModal()">Tutup</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    function cariProduk() {
-      const input = document.getElementById('search-bar').value.toLowerCase();
-      const produkList = document.querySelectorAll('.produk');
-      produkList.forEach(produk => {
-        const namaProduk = produk.querySelector('h3').textContent.toLowerCase();
-        produk.style.display = namaProduk.includes(input) ? '' : 'none';
+    // Data placeholder: mudah diubah/ganti nanti
+    const catalog = [
+      { id:'logam', label:'Logam Mulia Antam', icon:'💰' },
+      { id:'antan', label:'Antan', icon:'💍' },
+      { id:'mobil', label:'Mobil', icon:'🚗' },
+      { id:'tas', label:'Tas Branded', icon:'👜' },
+      { id:'jam', label:'Jam Tangan', icon:'⌚' }
+    ];
+
+    const products = {
+      logam: [
+        { id:'lm1', name:'Emas Antam 1 gram', price:'Rp 1.200.000', img:'https://via.placeholder.com/600x400?text=Emas+1gr', desc:'Emas batangan Antam 1gr, kondisi baik, sertifikat tersedia.', link:'#' },
+        { id:'lm2', name:'Emas Antam 5 gram', price:'Rp 5.800.000', img:'https://via.placeholder.com/600x400?text=Emas+5gr', desc:'Emas batangan Antam 5gr, cocok investasi jangka panjang.', link:'#' }
+      ],
+      antan: [
+        { id:'an1', name:'Cincin Antan Emas', price:'Rp 4.500.000', img:'https://via.placeholder.com/600x400?text=Cincin+Antan', desc:'Cincin Antan model klasik, bahan emas 0.75, termasuk kotak.', link:'#' },
+        { id:'an2', name:'Kalung Antan', price:'Rp 3.200.000', img:'https://via.placeholder.com/600x400?text=Kalung+Antan', desc:'Kalung Antan simpel dan elegan, material berkualitas.', link:'#' }
+      ],
+      mobil: [
+        { id:'m1', name:'Toyota Land Cruiser (placeholder)', price:'Rp 2.500.000.000', img:'https://via.placeholder.com/600x400?text=Land+Cruiser', desc:'SUV besar — placeholder. Detail lengkap dapat diisi nanti.', link:'#' },
+        { id:'m2', name:'Honda BR-V (placeholder)', price:'Rp 320.000.000', img:'https://via.placeholder.com/600x400?text=Honda+BR-V', desc:'MPV keluarga — placeholder image & harga.', link:'#' }
+      ],
+      tas: [
+        { id:'t1', name:'Louis Vuitton (placeholder)', price:'Rp 45.000.000', img:'https://via.placeholder.com/600x400?text=LV+Bag', desc:'Tas branded — gambar placeholder, ganti dengan foto asli nanti.', link:'#' },
+        { id:'t2', name:'Gucci Tote (placeholder)', price:'Rp 35.000.000', img:'https://via.placeholder.com/600x400?text=Gucci+Tote', desc:'Tas branded — deskripsi singkat placeholder.', link:'#' }
+      ],
+      jam: [
+        { id:'j1', name:'Rolex Submariner (placeholder)', price:'Rp 180.000.000', img:'https://via.placeholder.com/600x400?text=Rolex+Submariner', desc:'Jam mewah — placeholder. Ganti foto & rincian nanti.', link:'#' },
+        { id:'j2', name:'Casio G-Shock (placeholder)', price:'Rp 3.000.000', img:'https://via.placeholder.com/600x400?text=G-Shock', desc:'Jam sport / everyday — placeholder.', link:'#' }
+      ]
+    };
+
+    // render katalog
+    const katalogList = document.getElementById('katalogList');
+    catalog.forEach(cat=>{
+      const el = document.createElement('div');
+      el.className = 'katalog-item';
+      el.setAttribute('data-id', cat.id);
+      el.innerHTML = `<i aria-hidden="true">${cat.icon}</i><span>${cat.label}</span>`;
+      el.addEventListener('click', ()=> toggleProduk(cat.id));
+      katalogList.appendChild(el);
+    });
+
+    // render product containers (empty initially)
+    const produkArea = document.getElementById('produkArea');
+    Object.keys(products).forEach(key=>{
+      const cont = document.createElement('div');
+      cont.id = 'produk-' + key;
+      cont.className = 'produk-container';
+      produkArea.parentNode.insertBefore(cont, produkArea); // place before produkArea placeholder
+      // fill product items
+      products[key].forEach(p=>{
+        const item = document.createElement('div');
+        item.className = 'produk-item';
+        item.innerHTML = `
+          <img src="${p.img}" alt="${escapeHtml(p.name)}">
+          <div class="nama">${escapeHtml(p.name)}</div>
+          <div class="harga">${escapeHtml(p.price)}</div>
+          <button class="detail-btn" onclick="showDetail('${escapeJs(p.name)}', '${escapeJs(p.price)}', '${escapeJs(p.desc)}', '${p.img}', '${p.link}')">Lihat Detail</button>
+        `;
+        cont.appendChild(item);
       });
+    });
+
+    // fungsi toggle: open/close
+    function toggleProduk(id){
+      const all = document.querySelectorAll('.produk-container');
+      all.forEach(a=> a.style.display = 'none');
+      document.getElementById('judul').style.display = 'none';
+
+      const selected = document.getElementById('produk-' + id);
+      if(!selected) return;
+      // jika sudah terbuka, tutup (toggle)
+      const isOpen = selected.style.display === 'flex';
+      if(isOpen){ selected.style.display = 'none'; return; }
+
+      // buka
+      selected.style.display = 'flex';
+      const label = catalog.find(c=>c.id===id)?.label || id;
+      const judul = document.getElementById('judul');
+      judul.innerText = 'Produk ' + label;
+      judul.style.display = 'block';
+      // scroll halus ke judul
+      setTimeout(()=> window.scrollTo({ top: judul.offsetTop - 20, behavior:'smooth' }), 80);
+    }
+
+    // modal handling
+    const modal = document.getElementById('modal');
+    const modalClose = document.getElementById('modalClose');
+    modalClose.addEventListener('click', closeModal);
+    window.addEventListener('click', (e)=> { if(e.target === modal) closeModal(); });
+
+    function showDetail(name, price, desc, img, link){
+      document.getElementById('modalTitle').innerText = name;
+      document.getElementById('modalPrice').innerText = price;
+      document.getElementById('modalDesc').innerText = desc;
+      document.getElementById('modalImg').src = img;
+      const linkEl = document.getElementById('modalDetailLink');
+      linkEl.href = link || '#';
+      modal.classList.add('show');
+      modal.setAttribute('aria-hidden','false');
+    }
+    function closeModal(){
+      modal.classList.remove('show');
+      modal.setAttribute('aria-hidden','true');
+    }
+
+    // utility: escape untuk menghindari injeksi sederhana pada atribut onclick
+    function escapeJs(s){
+      return String(s).replace(/'/g,"\\'").replace(/"/g,'\\"').replace(/\n/g,' ');
+    }
+    function escapeHtml(s){
+      return String(s)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;')
+        .replace(/'/g,'&#39;');
     }
   </script>
 
