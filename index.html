@@ -11,6 +11,7 @@
       --muted:#d0d7de;
       --bg:#ffffff;
       --card:#f9f9f9;
+      --green:#28a745;
     }
     body{
       font-family: Arial, Helvetica, sans-serif;
@@ -25,8 +26,6 @@
       color:var(--navy);
       font-size:28px;
     }
-
-    /* katalog grid */
     .katalog-container{
       display:flex;
       flex-wrap:wrap;
@@ -54,10 +53,8 @@
     .katalog-item i{ font-size:36px; color:var(--blue); margin-bottom:8px; }
     .katalog-item span{ font-weight:700; color:var(--navy); font-size:15px; }
 
-    /* judul kategori */
     .judul-kategori{ text-align:center; color:var(--navy); font-size:20px; font-weight:700; margin-top:26px; display:none; }
 
-    /* produk grid */
     .produk-container{
       max-width:1000px;
       margin:18px auto 60px;
@@ -68,109 +65,101 @@
       animation:fadeIn .25s ease;
     }
     .produk-item{
-      width:220px;
+      width:260px;
       border:1px solid var(--muted);
       border-radius:10px;
       background:var(--card);
-      padding:10px;
+      padding:12px;
       text-align:center;
       transition:transform .18s ease, box-shadow .18s ease;
     }
     .produk-item:hover{ transform:translateY(-6px); box-shadow:0 8px 20px rgba(0,0,0,.08); }
-    .produk-item img{ width:100%; height:130px; object-fit:cover; border-radius:8px; margin-bottom:8px; }
-    .produk-item .nama{ display:block; font-weight:700; color:var(--navy); margin-bottom:6px; }
-    .produk-item .harga{ color:var(--blue); font-weight:700; margin-bottom:8px; }
-    .detail-btn{ display:inline-block; padding:8px 12px; background:var(--blue); color:#fff; text-decoration:none; border-radius:8px; font-size:14px; border:none; cursor:pointer; }
-    .detail-btn:hover{ background:#0056b3; }
-
-    /* modal */
-    .modal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:2000; align-items:center; justify-content:center; padding:20px; }
-    .modal.show{ display:flex; }
-    .modal-box{ width:100%; max-width:680px; background:#fff; border-radius:12px; padding:18px; box-shadow:0 10px 40px rgba(0,0,0,.25); position:relative; }
-    .modal-close{ position:absolute; top:12px; right:14px; font-size:22px; color:#666; cursor:pointer; }
-    .modal-content{ display:flex; gap:16px; flex-wrap:wrap; align-items:flex-start; }
-    .modal-img{ width:100%; max-width:320px; height:220px; object-fit:cover; border-radius:8px; }
-    .modal-info{ flex:1; min-width:180px; }
-    .modal-info h2{ margin:0 0 8px; color:var(--navy); font-size:20px; }
-    .modal-info .price{ color:var(--blue); font-weight:800; margin-bottom:10px; }
-    .modal-info p{ margin:0 0 12px; color:#333; line-height:1.4; }
-    .modal-info .actions{ margin-top:6px; }
-    .btn-secondary{ display:inline-block; padding:8px 12px; border-radius:8px; border:1px solid var(--muted); text-decoration:none; color:var(--navy); background:#fff; cursor:pointer; }
-    .btn-secondary:hover{ background:#f2f6fb; }
+    .produk-item img{ width:100%; height:150px; object-fit:cover; border-radius:8px; margin-bottom:8px; }
+    .produk-item .nama{ display:block; font-weight:700; color:var(--blue); margin-bottom:6px; font-size:15px; }
+    .produk-item .desc{ font-size:14px; color:#333; margin-bottom:6px; }
+    .produk-item .harga{ color:var(--navy); font-weight:700; margin-bottom:8px; }
+    .btn-green{ display:inline-block; padding:8px 12px; background:var(--green); color:#fff; text-decoration:none; border-radius:8px; font-size:14px; border:none; cursor:pointer; }
+    .btn-green:hover{ background:#218838; }
 
     @keyframes fadeIn{ from{opacity:0} to{opacity:1} }
-
-    /* responsive */
-    @media (max-width:720px){
-      .katalog-item{ width:140px; height:130px; padding:14px; }
-      .produk-item{ width:160px; }
-      .modal-content{ flex-direction:column; align-items:center; }
-      .modal-img{ max-width:100%; height:200px; }
-    }
   </style>
 </head>
 <body>
 
   <h1>Katalog Lelang (Placeholder)</h1>
 
-  <div class="katalog-container" id="katalogList">
-    <!-- katalog items di-render oleh JS -->
-  </div>
+  <div class="katalog-container" id="katalogList"></div>
 
   <div id="judul" class="judul-kategori"></div>
 
-  <!-- wadah produk (akan diisi dinamis) -->
   <div id="produkArea" class="produk-container"></div>
 
-  <!-- Modal detail -->
-  <div id="modal" class="modal" aria-hidden="true">
-    <div class="modal-box" role="dialog" aria-modal="true">
-      <div class="modal-close" id="modalClose">&times;</div>
-      <div class="modal-content">
-        <img id="modalImg" class="modal-img" src="" alt="Gambar Produk">
-        <div class="modal-info">
-          <h2 id="modalTitle">Nama Produk</h2>
-          <div class="price" id="modalPrice">Rp 0</div>
-          <p id="modalDesc">Deskripsi singkat produk akan tampil di sini.</p>
-          <div class="actions">
-            <a id="modalDetailLink" class="detail-btn" href="#" target="_blank">Lihat Halaman</a>
-            <button class="btn-secondary" onclick="closeModal()">Tutup</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <script>
-    // Data placeholder: mudah diubah/ganti nanti
+    // daftar kategori (Antan sudah dihapus)
     const catalog = [
       { id:'logam', label:'Logam Mulia Antam', icon:'💰' },
-      { id:'antan', label:'Antan', icon:'💍' },
       { id:'mobil', label:'Mobil', icon:'🚗' },
       { id:'tas', label:'Tas Branded', icon:'👜' },
       { id:'jam', label:'Jam Tangan', icon:'⌚' }
     ];
 
+    // produk logam baru berdasarkan gambar yang kamu kirim
     const products = {
       logam: [
-        { id:'lm1', name:'Emas Antam 1 gram', price:'Rp 1.200.000', img:'https://via.placeholder.com/600x400?text=Emas+1gr', desc:'Emas batangan Antam 1gr, kondisi baik, sertifikat tersedia.', link:'#' },
-        { id:'lm2', name:'Emas Antam 5 gram', price:'Rp 5.800.000', img:'https://via.placeholder.com/600x400?text=Emas+5gr', desc:'Emas batangan Antam 5gr, cocok investasi jangka panjang.', link:'#' }
-      ],
-      antan: [
-        { id:'an1', name:'Cincin Antan Emas', price:'Rp 4.500.000', img:'https://via.placeholder.com/600x400?text=Cincin+Antan', desc:'Cincin Antan model klasik, bahan emas 0.75, termasuk kotak.', link:'#' },
-        { id:'an2', name:'Kalung Antan', price:'Rp 3.200.000', img:'https://via.placeholder.com/600x400?text=Kalung+Antan', desc:'Kalung Antan simpel dan elegan, material berkualitas.', link:'#' }
+        {
+          id:'lm500',
+          name:'Fine Gold 999.9 Sertifikat LBMA (500 g)',
+          desc:'Emas batangan Antam 500 gram bersertifikat LBMA dengan kadar kemurnian 999.9 (24 karat).',
+          price:'Rp 900.000.000',
+          img:'https://via.placeholder.com/600x400?text=Fine+Gold+LBMA+500g'
+        },
+        {
+          id:'lm250',
+          name:'Fine Gold 999.9 Sertifikat LBMA (250 g)',
+          desc:'Emas batangan Antam 250 gram bersertifikat LBMA, kadar 999.9 (24 karat).',
+          price:'Rp 450.000.000',
+          img:'https://via.placeholder.com/600x400?text=Fine+Gold+LBMA+250g'
+        },
+        {
+          id:'lm50',
+          name:'Fine Gold 999.9 Certifye (50 g)',
+          desc:'Emas Antam bersertifikat Certifye dengan kemurnian 999.9.',
+          price:'Rp 90.000.000',
+          img:'https://via.placeholder.com/600x400?text=Fine+Gold+999.9+50g'
+        },
+        {
+          id:'lm25',
+          name:'Fine Gold 999.9 Certifye (25 g)',
+          desc:'Emas Antam 25 gram bersertifikat Certifye.',
+          price:'Rp 45.000.000',
+          img:'https://via.placeholder.com/600x400?text=Fine+Gold+999.9+25g'
+        },
+        {
+          id:'lm10',
+          name:'Fine Gold 999.9 Certifye (10 g)',
+          desc:'Emas Antam 10 gram bersertifikat Certifye.',
+          price:'Rp 18.000.000',
+          img:'https://via.placeholder.com/600x400?text=Fine+Gold+999.9+10g'
+        },
+        {
+          id:'lm1kilo',
+          name:'Fine Gold 999.9 Sertifikat LBMA (1 Kilo)',
+          desc:'Emas batangan Antam 1 kilogram bersertifikat LBMA dengan kadar kemurnian 999.9 (24 karat).',
+          price:'Rp 1.800.000.000',
+          img:'https://via.placeholder.com/600x400?text=Fine+Gold+LBMA+1Kilo'
+        }
       ],
       mobil: [
-        { id:'m1', name:'Toyota Land Cruiser (placeholder)', price:'Rp 2.500.000.000', img:'https://via.placeholder.com/600x400?text=Land+Cruiser', desc:'SUV besar — placeholder. Detail lengkap dapat diisi nanti.', link:'#' },
-        { id:'m2', name:'Honda BR-V (placeholder)', price:'Rp 320.000.000', img:'https://via.placeholder.com/600x400?text=Honda+BR-V', desc:'MPV keluarga — placeholder image & harga.', link:'#' }
+        { id:'m1', name:'Toyota Land Cruiser (placeholder)', price:'Rp 2.500.000.000', img:'https://via.placeholder.com/600x400?text=Land+Cruiser', desc:'SUV besar — placeholder. Detail lengkap dapat diisi nanti.' },
+        { id:'m2', name:'Honda BR-V (placeholder)', price:'Rp 320.000.000', img:'https://via.placeholder.com/600x400?text=Honda+BR-V', desc:'MPV keluarga — placeholder image & harga.' }
       ],
       tas: [
-        { id:'t1', name:'Louis Vuitton (placeholder)', price:'Rp 45.000.000', img:'https://via.placeholder.com/600x400?text=LV+Bag', desc:'Tas branded — gambar placeholder, ganti dengan foto asli nanti.', link:'#' },
-        { id:'t2', name:'Gucci Tote (placeholder)', price:'Rp 35.000.000', img:'https://via.placeholder.com/600x400?text=Gucci+Tote', desc:'Tas branded — deskripsi singkat placeholder.', link:'#' }
+        { id:'t1', name:'Louis Vuitton (placeholder)', price:'Rp 45.000.000', img:'https://via.placeholder.com/600x400?text=LV+Bag', desc:'Tas branded — gambar placeholder, ganti dengan foto asli nanti.' },
+        { id:'t2', name:'Gucci Tote (placeholder)', price:'Rp 35.000.000', img:'https://via.placeholder.com/600x400?text=Gucci+Tote', desc:'Tas branded — deskripsi singkat placeholder.' }
       ],
       jam: [
-        { id:'j1', name:'Rolex Submariner (placeholder)', price:'Rp 180.000.000', img:'https://via.placeholder.com/600x400?text=Rolex+Submariner', desc:'Jam mewah — placeholder. Ganti foto & rincian nanti.', link:'#' },
-        { id:'j2', name:'Casio G-Shock (placeholder)', price:'Rp 3.000.000', img:'https://via.placeholder.com/600x400?text=G-Shock', desc:'Jam sport / everyday — placeholder.', link:'#' }
+        { id:'j1', name:'Rolex Submariner (placeholder)', price:'Rp 180.000.000', img:'https://via.placeholder.com/600x400?text=Rolex+Submariner', desc:'Jam mewah — placeholder. Ganti foto & rincian nanti.' },
+        { id:'j2', name:'Casio G-Shock (placeholder)', price:'Rp 3.000.000', img:'https://via.placeholder.com/600x400?text=G-Shock', desc:'Jam sport / everyday — placeholder.' }
       ]
     };
 
@@ -185,74 +174,43 @@
       katalogList.appendChild(el);
     });
 
-    // render product containers (empty initially)
+    // render produk
     const produkArea = document.getElementById('produkArea');
     Object.keys(products).forEach(key=>{
       const cont = document.createElement('div');
       cont.id = 'produk-' + key;
       cont.className = 'produk-container';
-      produkArea.parentNode.insertBefore(cont, produkArea); // place before produkArea placeholder
-      // fill product items
+      produkArea.parentNode.insertBefore(cont, produkArea);
       products[key].forEach(p=>{
         const item = document.createElement('div');
         item.className = 'produk-item';
         item.innerHTML = `
           <img src="${p.img}" alt="${escapeHtml(p.name)}">
           <div class="nama">${escapeHtml(p.name)}</div>
+          <div class="desc">${escapeHtml(p.desc)}</div>
           <div class="harga">${escapeHtml(p.price)}</div>
-          <button class="detail-btn" onclick="showDetail('${escapeJs(p.name)}', '${escapeJs(p.price)}', '${escapeJs(p.desc)}', '${p.img}', '${p.link}')">Lihat Detail</button>
+          <a href="#" class="btn-green">Beli Sekarang</a>
         `;
         cont.appendChild(item);
       });
     });
 
-    // fungsi toggle: open/close
     function toggleProduk(id){
       const all = document.querySelectorAll('.produk-container');
       all.forEach(a=> a.style.display = 'none');
       document.getElementById('judul').style.display = 'none';
-
       const selected = document.getElementById('produk-' + id);
       if(!selected) return;
-      // jika sudah terbuka, tutup (toggle)
       const isOpen = selected.style.display === 'flex';
       if(isOpen){ selected.style.display = 'none'; return; }
-
-      // buka
       selected.style.display = 'flex';
       const label = catalog.find(c=>c.id===id)?.label || id;
       const judul = document.getElementById('judul');
       judul.innerText = 'Produk ' + label;
       judul.style.display = 'block';
-      // scroll halus ke judul
       setTimeout(()=> window.scrollTo({ top: judul.offsetTop - 20, behavior:'smooth' }), 80);
     }
 
-    // modal handling
-    const modal = document.getElementById('modal');
-    const modalClose = document.getElementById('modalClose');
-    modalClose.addEventListener('click', closeModal);
-    window.addEventListener('click', (e)=> { if(e.target === modal) closeModal(); });
-
-    function showDetail(name, price, desc, img, link){
-      document.getElementById('modalTitle').innerText = name;
-      document.getElementById('modalPrice').innerText = price;
-      document.getElementById('modalDesc').innerText = desc;
-      document.getElementById('modalImg').src = img;
-      const linkEl = document.getElementById('modalDetailLink');
-      linkEl.href = link || '#';
-      modal.classList.add('show');
-      modal.setAttribute('aria-hidden','false');
-    }
-    function closeModal(){
-      modal.classList.remove('show');
-      modal.setAttribute('aria-hidden','true');
-    }
-
-    // utility: escape untuk menghindari injeksi sederhana pada atribut onclick
-    function escapeJs(s){
-      return String(s).replace(/'/g,"\\'").replace(/"/g,'\\"').replace(/\n/g,' ');
-    }
     function escapeHtml(s){
       return String(s)
         .replace(/&/g,'&amp;')
